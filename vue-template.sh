@@ -14,7 +14,7 @@ echo "What is your project called?"
 read PROJECT_NAME
 echo "Great, moving on\n"
 
-read -p "Do you need routing? (y/n)" WANT_ROUTER
+read -p "Do you need routing? (y/n) " WANT_ROUTER
 
 case $WANT_ROUTER in
 	[yY] ) 
@@ -26,7 +26,7 @@ case $WANT_ROUTER in
 		;;
 esac
 
-read -p "Do you need state management in your app? (y/n)" WANT_STATE_MANAGER
+read -p "Do you need state management in your app? (y/n) " WANT_STATE_MANAGER
 
 case $WANT_STATE_MANAGER in
 	[yY] ) 
@@ -54,7 +54,16 @@ case $INSTALL_ROUTER in
 		echo "Installing router"
 		npm install vue-router@4
 		cd src && mkdir router && cd router && touch index.js
-		echo "import { createRouter, createWebHistory } from 'vue-router'\n\nconst routes = []\n\nconst router = createRouter({\n\thistory: createWebHistory(import.meta.env.BASE_URL),\n\troutes,\n})\n\nexport default router" > index.js
+		echo "
+import { createRouter, createWebHistory } from 'vue-router'
+const routes = []
+const Router = createRouter({
+	history: createWebHistory(import.meta.env.BASE_URL),
+	routes,
+})
+
+export default Router
+		" > index.js
 		cd ../..
 		;;
 esac
@@ -66,10 +75,40 @@ case $INSTALL_STATE_MANAGER in
 		npm install pinia
 		echo "Creating store directory\n"
 		cd src && mkdir store && cd store && touch index.js
-		echo "import { createPinia } from 'pinia'\n\nexport const store = createPinia()" > index.js
+		echo "Creating store file\n"
+		echo "
+import {defineStore} from 'pinia'
+
+export const useCounterStore = defineStore('store', () => {
+	return {
+		count: 0
+	}
+})
+		" > index.js
 		cd ../..
 		;;
 esac
 
+echo "
+Project initialized
+--------------------------------------------------
+if you want to use the router and or the pinia state manager, you need to import it in your main.js file
+--------------------------------------------------
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import Router from './router'
+import { createPinia } from 'pinia'
+
+const app = createApp(App)
+	app.use(Router)
+	app.use(createPinia())
+	app.mount('#app')
+
+--------------------------------------------------
+Happy coding :)
+--------------------------------------------------
+"
+
 # run dev server to get started with the project
-npm run dev
+# npm run dev
