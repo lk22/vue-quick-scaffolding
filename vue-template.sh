@@ -111,4 +111,4 @@ Happy coding :)
 "
 
 # run dev server to get started with the project
-# npm run dev
+npm run dev
