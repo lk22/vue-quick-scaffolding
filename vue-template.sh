@@ -54,7 +54,7 @@ case $INSTALL_ROUTER in
 		echo "Installing router"
 		npm install vue-router@4
 		cd src && mkdir router && cd router && touch index.js
-		echo "import { createRouter, createWebHistory } from 'vue-router'\n\nconst routes = []\n\nconst router = createRouter({\n\thistory: createWebHistory(),\n\troutes,\n})\n\nexport default router" > index.js
+		echo "import { createRouter, createWebHistory } from 'vue-router'\n\nconst routes = []\n\nconst router = createRouter({\n\thistory: createWebHistory(import.meta.env.BASE_URL),\n\troutes,\n})\n\nexport default router" > index.js
 		cd ../..
 		;;
 esac
