@@ -56,7 +56,7 @@ case $INSTALL_ROUTER in
 		cd src && mkdir router && cd router && touch index.js
 		echo "
 import { createRouter, createWebHistory } from 'vue-router'
-const routes = []
+import { routes } from './routes'
 const Router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes,
@@ -64,7 +64,21 @@ const Router = createRouter({
 
 export default Router
 		" > index.js
-		cd ../..
+		touch routes.js
+		echo "
+		export const routes = [
+			{
+				path: '/',
+				name: 'Home',
+				component: () => import('../views/Home.vue'),
+			},
+			{
+				path: '/:pathMatch(.*)*',
+				name: 'NotFound',
+				component: () => import(/* webpackChunkName: "notfound" */ "../views/NotFound.vue"),
+			},
+		];
+		"
 		;;
 esac
 
